@@ -7,3 +7,9 @@ release.properties
 dependency-reduced-pom.xml
 buildNumber.properties
 .mvn/timing.properties
+/Implementation/ClusteringStudy/nbproject/
+/Implementation/ClusteringStudy/log/*.log
+/Implementation/ClusteringStudy/log/*.log.1
+/Implementation/ClusteringStudy/log/*.lck
+/Implementation/ClusteringStudy/log/*.log.lck
+/Implementation/ClusteringStudy/Experiment/*
