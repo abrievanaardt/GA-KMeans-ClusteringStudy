@@ -34,20 +34,23 @@ import java.util.logging.Logger;
  *
  * @author Abrie van Aardt
  */
-public class Dataset implements Iterable {
+public class Dataset
+{
 
     /**
      * A dataset object can only be instantiated via a call to the static
      * {@link Dataset#fromFile(java.lang.String)} method, or a call to
      * {@link Dataset#split(double)} on an existing Dataset object.
      */
-    private Dataset() {
+    private Dataset()
+    {
     }
 
     //TODO: data is scaled to [-1,1]. Double check that [root(3), root(3)] is
     //not preferred
     public static Dataset fromFile(String resourceName)
-            throws FileNotFoundException, IncorrectFileFormatException {
+            throws FileNotFoundException, IncorrectFileFormatException
+    {
 
         Scanner scanner;
         Dataset dataset = new Dataset();
@@ -55,45 +58,20 @@ public class Dataset implements Iterable {
         scanner = new Scanner(classLoader.getResourceAsStream(resourceName));
         scanner.useDelimiter("\\n|\\r\\n|\\r|\\s");
 
-        //try to parse the number of inputs and targets from the file
-        try {
-            if (scanner.findInLine("i") == null) {
-                throw new IncorrectFileFormatException();
-            }
-
-            dataset.inputCount = Integer.parseInt(scanner.findInLine("\\d+"));
-            scanner.nextLine();
-
-            if (scanner.findInLine("h") == null) {
-                throw new IncorrectFileFormatException();
-            }
-
-            dataset.hiddenCount = Integer.parseInt(scanner.findInLine("\\d+"));
-            scanner.nextLine();
-
-            if (scanner.findInLine("t") == null) {
-                throw new IncorrectFileFormatException();
-            }
-
-            dataset.targetCount = Integer.parseInt(scanner.findInLine("\\d+"));
-            scanner.nextLine();
-
-        }
-        catch (NumberFormatException e) {
-            throw new IncorrectFileFormatException();
-        }
-
         //demarshal the data patterns
         double[] inputs = new double[dataset.inputCount];
-        double[] targets = new double[dataset.targetCount];
+        int[] targets = new int[dataset.targetCount];
 
-        while (scanner.hasNextDouble()) {
-            for (int i = 0; i < inputs.length; i++) {
+        while (scanner.hasNextDouble())
+        {
+            for (int i = 0; i < inputs.length; i++)
+            {
                 inputs[i] = scanner.nextDouble();
             }
 
-            for (int i = 0; i < targets.length; i++) {
-                targets[i] = scanner.nextDouble();
+            for (int i = 0; i < targets.length; i++)
+            {
+                targets[i] = scanner.nextInt();
             }
 
             Pattern p = new Pattern();
@@ -105,7 +83,8 @@ public class Dataset implements Iterable {
 
         Logger logger = Logger.getLogger(Dataset.class.getName());
         logger.log(Level.INFO, "Loaded {3} pattern(s) with {1} input(s) "
-                + "and {2} class(es) from dataset: {0}.", new Object[]{
+                + "and {2} class(es) from dataset: {0}.", new Object[]
+                {
                     resourceName.substring(resourceName.lastIndexOf('/') + 1),
                     dataset.inputCount,
                     dataset.targetCount,
@@ -113,7 +92,8 @@ public class Dataset implements Iterable {
                 });
 
         logger.log(Level.INFO, "{0} has an optimal 3-layered NN configuration"
-                + " requiring {1} hidden units.", new Object[]{
+                + " requiring {1} hidden units.", new Object[]
+                {
                     resourceName.substring(resourceName.lastIndexOf('/') + 1),
                     dataset.hiddenCount
                 });
@@ -123,30 +103,64 @@ public class Dataset implements Iterable {
         return dataset;
     }
 
-    @Override
-    public Iterator<Pattern> iterator() {
-        return data.iterator();
+    public double[][] getPatternInputs()
+    {
+        double[][] input = new double[data.size()][data.get(0).getInputs().length];
+        Pattern patt;
+
+        for (int i = 0; i < data.size(); i++)
+        {
+            patt = data.get(i);
+            for (int j = 0; j < patt.getInputs().length; j++)
+            {
+                input[i][j] = patt.getInputs()[j];
+            }
+
+        }
+
+        return input;
+    }
+
+    public int[] getPatternTargets()
+    {
+        int[] output = new int[data.size()];
+        Pattern patt;
+
+        for (int i = 0; i < data.size(); i++)
+        {
+            patt = data.get(i);
+
+            output[i] = patt.getTargets()[0];
+
+
+        }
+
+        return output;
     }
 
     /**
-     * Partitions the dataset. This method provides
-     * respective views for the training and testing datasets. Views are
-     * backed by the same underlying dataset.
+     * Partitions the dataset. This method provides respective views for the
+     * training and testing datasets. Views are backed by the same underlying
+     * dataset.
      *
      * @param ratios the ratio in which the dataset should be divided
      * @return List of Datasets
      */
-    public List<Dataset> split(double... ratios) {
+    public List<Dataset> split(double... ratios)
+    {
 
         if (Arrays.stream(ratios).sum() != 1.0)
+        {
             throw new IllegalArgumentException("Ratios in call to split dataset do not add up to 1");
+        }
 
         List<Dataset> datasets = new ArrayList<>();
 
         int lowerIndex = 0;
         int upperIndex;
 
-        for (int i = 0; i < ratios.length; i++) {
+        for (int i = 0; i < ratios.length; i++)
+        {
             Dataset dataset = new Dataset();
 
             dataset.inputCount = inputCount;
@@ -161,44 +175,52 @@ public class Dataset implements Iterable {
         }
 
         String parts = Arrays.toString(Arrays.stream(ratios).map(r -> r * 100.0).toArray());
-        
+
         LOGGER.log(Level.INFO, "Split dataset into {0} part(s): {1}",
-                new Object[]{
+                new Object[]
+                {
                     ratios.length,
                     parts
                 });
-        
+
         return datasets;
     }
 
-    public Dataset shuffle() {
+    public Dataset shuffle()
+    {
         Collections.shuffle(data, random);
         return this;
     }
 
-    public int size() {
+    public int size()
+    {
         return data.size();
     }
 
-    public int getInputCount() {
+    public int getInputCount()
+    {
         return inputCount;
     }
 
-    public int getTargetCount() {
+    public int getTargetCount()
+    {
         return targetCount;
     }
 
-    public int getHiddenCount() {
+    public int getHiddenCount()
+    {
         return hiddenCount;
     }
-    
-    public String getDatasetName(){
-        return name;        
-    }   
-    
-    public void setDatasetName(String _name){
+
+    public String getDatasetName()
+    {
+        return name;
+    }
+
+    public void setDatasetName(String _name)
+    {
         name = _name;
-    }    
+    }
 
     private String name;
     private List<Pattern> data = new ArrayList<>();

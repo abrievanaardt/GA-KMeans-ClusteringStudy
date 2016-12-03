@@ -14,7 +14,7 @@ public class Pattern {
         return Arrays.copyOf(inputs, inputs.length);
     }
 
-    public double[] getTargets() {
+    public int[] getTargets() {
         return Arrays.copyOf(targets, targets.length);
     }
 
@@ -22,10 +22,10 @@ public class Pattern {
         inputs = Arrays.copyOf(_inputs, _inputs.length);
     }
 
-    public void setTargets(double[] _targets) {
+    public void setTargets(int[] _targets) {
         targets = Arrays.copyOf(_targets, _targets.length);
     }
 
     private double[] inputs;
-    private double[] targets;
+    private int[] targets;
 }
