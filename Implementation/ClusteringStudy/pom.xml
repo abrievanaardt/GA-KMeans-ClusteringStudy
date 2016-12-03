@@ -16,7 +16,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>ac.up.cos781.clusteringStudy.main.MainMichelle</mainClass>
+                            <mainClass>ac.up.cos781.clusteringStudy.algorithm.kmeans.Kmeans</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
