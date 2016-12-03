@@ -11,6 +11,7 @@ public class GA_Algorithm
     private final int numClusters;
     private int currentGenerationCount;
     private final GAConfiguration config;
+    private final double[] fitnessVals;
 
     public GA_Algorithm(GAConfiguration _config, double[][] _dataObjs, int _numClusters)
     {
@@ -20,6 +21,7 @@ public class GA_Algorithm
         currentGenerationCount = 0;
         population = new Chromosome[config.getPopSize()];
         bestIndividuals = new Chromosome[config.getMaxGen()];
+        fitnessVals = new double[config.getMaxGen()];
     }
 
     //The skeleton GA algorithm
@@ -63,7 +65,8 @@ public class GA_Algorithm
         Chromosome temp;
         for (int i = 0; i < config.getPopSize(); i++)
         {
-            config.getFitness().calculateFitness(pop[i], dataObjs, numClusters);
+            temp = pop[i];
+            temp.setFitness(config.getFitness().calculateFitness(temp, dataObjs, numClusters));
         }
     }
 
@@ -93,7 +96,7 @@ public class GA_Algorithm
 
         for (int i = 0; i < config.getPopSize(); i++)
         {
-            newPop[i] = population[i];
+            newPop[i] = new Chromosome(population[i]);
         }
 
         return newPop;
@@ -104,7 +107,7 @@ public class GA_Algorithm
     {
         for (int i = 0; i < config.getPopSize(); i++)
         {
-            config.getMutation().mutate(pop[i]);
+            config.getMutation().mutate(pop[i], numClusters);
         }
     }
 
@@ -116,6 +119,7 @@ public class GA_Algorithm
         orderAccordingToFitness(pop);
 
         int j = 0;
+        int k = (int) (config.getPopSize() * config.getElitistPerc());
         for (int i = (int) (config.getPopSize() * config.getElitistPerc()); i < config.getPopSize(); i++)
         {
             population[i] = pop[j];
@@ -135,6 +139,9 @@ public class GA_Algorithm
         orderAccordingToFitness(population);
 
         bestIndividuals[currentGenerationCount - 1] = population[0];
+        fitnessVals[currentGenerationCount - 1] = population[0].getFitness();
+        double val = population[0].getFitness();
+        System.out.println(population[0].getFitness());
     }
 
     //Orders accroding to the fitnes of each individual (uses the compareTo function implemented in Chromosome class)

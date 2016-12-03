@@ -16,7 +16,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>ac.up.cos711.rbfnntraining.main.Main</mainClass>
+                            <mainClass>ac.up.cos781.clusteringStudy.main.MainMichelle</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

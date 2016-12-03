@@ -7,17 +7,18 @@ import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class Chromosome
+public class Chromosome implements Comparable<Chromosome>
 {
 
     private int[] genes;
-    private Double fitness;
+    private double fitness;
 
     //TODO: test if that hash map makes anything slower
     public Chromosome(int numOfClusters, int numOfDataObjects)
     {
         Random rand = new Random();
         Boolean valid = false;
+        genes = new int[numOfDataObjects];
 
         while (!valid)
         {
@@ -36,13 +37,13 @@ public class Chromosome
         }
     }
 
-    public Chromosome(ArrayList<Integer> toCopy)
+    public Chromosome(Chromosome toCopy)
     {
-        genes = new int[toCopy.size()];
+        genes = new int[toCopy.getGenes().length];
 
-        for (int i = 0; i < toCopy.size(); i++)
+        for (int i = 0; i < toCopy.getGenes().length; i++)
         {
-            genes[i] = (toCopy.get(i));
+            genes[i] = (toCopy.getGenes()[i]);
         }
     }
 
@@ -61,12 +62,12 @@ public class Chromosome
         genes[index] = val;
     }
 
-    public void setFitness(Double _fitness)
+    public void setFitness(double _fitness)
     {
         fitness = _fitness;
     }
 
-    public Double getFitness()
+    public double getFitness()
     {
         return fitness;
     }
@@ -81,12 +82,22 @@ public class Chromosome
     }
 
     //Function used to comapre this Chromosome and another, used to sort
-    public double compareTo(Chromosome compareFruit)
+    @Override
+    public int compareTo(Chromosome chrom)
     {
-        double comFitness = compareFruit.getFitness();
+        double comFitness = chrom.getFitness();
 
         //ascending order
-        return this.fitness - comFitness;
+        if (this.fitness < comFitness)
+        {
+            return -1;
+        }
+        else if (this.fitness > comFitness)
+        {
+            return 1;
+        }
+
+        return 0;
 
     }
 }

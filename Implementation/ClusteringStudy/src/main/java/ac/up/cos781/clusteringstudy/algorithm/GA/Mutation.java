@@ -6,17 +6,15 @@ public class Mutation {
     
     private final double rate; 
     private final Random random;
-    private final int clusters;
     
-    public Mutation(double _rate, int _clusters)
+    public Mutation(double _rate)
     {
         rate = _rate;
         random = new Random(System.currentTimeMillis());
-        clusters = _clusters;
     }
 
     //For each gene a random mutation is calculated, if it is smaller than the rate, then the gene is mutated if it is not the only occurence
-    public void mutate(Chromosome chrom)
+    public void mutate(Chromosome chrom, int clusters)
     {
         int[] genes = chrom.getGenes();
         double rand;

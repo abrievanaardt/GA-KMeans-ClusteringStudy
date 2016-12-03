@@ -58,6 +58,27 @@ public class Dataset
         scanner = new Scanner(classLoader.getResourceAsStream(resourceName));
         scanner.useDelimiter("\\n|\\r\\n|\\r|\\s");
 
+        //try to parse the number of inputs and targets from the file
+        try {
+            if (scanner.findInLine("i") == null) {
+                throw new IncorrectFileFormatException();
+            }
+
+            dataset.inputCount = Integer.parseInt(scanner.findInLine("\\d+"));
+            scanner.nextLine();
+
+            if (scanner.findInLine("t") == null) {
+                throw new IncorrectFileFormatException();
+            }
+
+            dataset.targetCount = Integer.parseInt(scanner.findInLine("\\d+"));
+            scanner.nextLine();
+
+        }
+        catch (NumberFormatException e) {
+            throw new IncorrectFileFormatException();
+        }
+        
         //demarshal the data patterns
         double[] inputs = new double[dataset.inputCount];
         int[] targets = new int[dataset.targetCount];
