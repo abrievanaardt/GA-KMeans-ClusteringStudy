@@ -20,11 +20,11 @@ public class MainMichelle
        double[][] data = Dataset.fromFile("ac/up/cos781/clusteringstudy/data/movementlibras.data").getPatternInputs();
        int clusters = 3;
        
-       Mutation mutation = new Mutation(0.9);
+       Mutation mutation = new Mutation(0.0);
        Selection selection = new TournamentSelection(2);
        Crossover crossover = new Crossover(0.3);
        Fitness fitness = new SSE();
-       GAConfiguration config = new GAConfiguration(mutation, selection, crossover, fitness, 500, 0.5, 60);
+       GAConfiguration config = new GAConfiguration(mutation, selection, crossover, fitness, 500, 0.5, 300);
        GA_Algorithm ga = new GA_Algorithm(config, data, clusters); 
        ga.runAlgorithm();
         

@@ -43,6 +43,7 @@ public class SSE implements Fitness
             sum += Math.pow(data[i] - means[i]/count, 2);
         }
         
-        return Math.sqrt(sum);
+//        return Math.sqrt(sum);
+        return sum/(means.length * data.length);
     }
 }
