@@ -149,4 +149,9 @@ public class GA_Algorithm
     {
         Arrays.sort(pop);
     }
+    
+    public Chromosome getBestChromosome()
+    {
+        return population[0];
+    }
 }

@@ -24,5 +24,7 @@ public class TournamentSelection implements Selection
             return population[rand1];
         
         return population[rand2];
+        
+        
     }
 }

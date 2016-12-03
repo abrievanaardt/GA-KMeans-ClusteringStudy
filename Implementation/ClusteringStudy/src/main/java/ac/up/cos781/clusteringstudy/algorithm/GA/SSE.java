@@ -27,10 +27,10 @@ public class SSE implements Fitness
         
         for (int i = 0; i < genes.length; i++)
         {
-            totalClusterSum += distance(dataObjs[i], means[genes[i]], counts[genes[i]]);
+            totalClusterSum += Math.pow(distance(dataObjs[i], means[genes[i]], counts[genes[i]]), 2);
         }
         
-        return totalClusterSum;
+        return totalClusterSum/dataObjs.length;
     }
     
     private double distance(double[] data, double[] means, int count)
@@ -43,7 +43,7 @@ public class SSE implements Fitness
             sum += Math.pow(data[i] - means[i]/count, 2);
         }
         
-//        return Math.sqrt(sum);
-        return sum/(means.length * data.length);
+        return Math.sqrt(sum);
+//        return sum/(means.length * data.length);
     }
 }

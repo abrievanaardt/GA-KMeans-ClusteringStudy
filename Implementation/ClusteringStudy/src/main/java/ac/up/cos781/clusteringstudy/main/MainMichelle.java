@@ -18,16 +18,15 @@ public class MainMichelle
     public static void main(String[] args) throws FileNotFoundException, IncorrectFileFormatException
     {
        double[][] data = Dataset.fromFile("ac/up/cos781/clusteringstudy/data/movementlibras.data").getPatternInputs();
-       int clusters = 3;
+       int clusters = 15;
        
-       Mutation mutation = new Mutation(0.0);
        Selection selection = new TournamentSelection(2);
        Crossover crossover = new Crossover(0.3);
        Fitness fitness = new SSE();
-       GAConfiguration config = new GAConfiguration(mutation, selection, crossover, fitness, 500, 0.5, 300);
        GA_Algorithm ga = new GA_Algorithm(config, data, clusters); 
        ga.runAlgorithm();
-        
+       int[] outputs = Dataset.fromFile("ac/up/cos781/clusteringstudy/data/movementlibras.data").getPatternTargets();
+       int[] actualOutput  = ga.getBestChromosome().getGenes();
     }
 
 }

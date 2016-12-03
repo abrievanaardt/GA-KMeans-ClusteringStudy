@@ -119,7 +119,7 @@ public class Dataset
                     dataset.hiddenCount
                 });
 
-        dataset.shuffle();
+        //dataset.shuffle();
 
         return dataset;
     }
